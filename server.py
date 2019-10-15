@@ -14,12 +14,16 @@ class ServerStub(object):
     def sqrt(self, x):
         return x**(1/2)
 
+    def append(self, x, y):
+        return x + y
+
     def __init__(self):
         super(ServerStub, self).__init__()
         self.availableMethods = [
             ('add', 'x,y', 'params: x,y -> x+y'),
             ('mult', 'x,y', 'params: x,y -> x*y'),
-            ('sqrt', 'x', 'params: x -> sqrt(x)')
+            ('sqrt', 'x', 'params: x -> sqrt(x)'),
+            ('append', 'x, y', 'params: x,y -> [...x, ...y]')
         ]
 
 

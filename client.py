@@ -67,7 +67,7 @@ class ClientStub(object):
 def main():
     a = ClientStub()
     a.showAvailableFunctions()
-    res = a.sqrt(4)
+    res = a.append([1,2],[3,4])
     print(res)
 if __name__ == '__main__':
     main()
