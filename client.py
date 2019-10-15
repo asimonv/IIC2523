@@ -1,52 +1,61 @@
 import socket
 import sys
-import pickle
+import json
 
-class A(object):
-    """docstring for A."""
+class ClientStub(object):
+    """docstring for ClientStub."""
 
     def __init__(self):
-        super(A, self).__init__()
-        funcs = self.fetchParams()
-        self.buildFunctions(funcs)
+        super(ClientStub, self).__init__()
+        # Create a TCP/IP socket
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        # Connect the socket to the port where the server is listening
+        server_address = ('localhost', 4000)
+        print >>sys.stderr, 'connecting to %s port %s' % server_address
+        self.sock.connect(server_address)
+        self.fetchParams()
 
     def fetchParams(self):
-        funcs = [('add', 'x,y')]
-        return funcs
+        message = {'id': 'get_functions', 'content': []}
+        try:
+            self.sock.send(json.dumps(message))
+            data = self.sock.recv(4096)
+            if data:
+                res = self.unmarshall_message(data)
+        except Exception as e:
+            raise
+        finally:
+            pass
 
     def buildFunctions(self, funcs):
         for func in funcs:
-            name, params = func
+            name, params, desc = func
             self.make_method(name, params.split(','))
+
+    def unmarshall_message(self, data):
+        json_data = json.loads(data)
+        # message with all server functions
+        if json_data['id'] == 'get_functions':
+            self.buildFunctions(json_data['content'])
+        # message with result of RPC
+        elif json_data['id'] == 'res':
+            return json_data['content']
 
     def make_method(self, name, params):
         def _method(self, *params):
-            if name == 'add':
-                return params[0] + params[1]
+            message = {'id': name, 'params': params}
+            self.sock.send(json.dumps(message))
+            data = self.sock.recv(4096)
+            if data:
+                res = self.unmarshall_message(data)
+                return res
+            return None
         setattr(self.__class__, name, _method)
 
-a = A()
-print(a.add(1,2))
-
-
-# Create a TCP/IP socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-# Connect the socket to the port where the server is listening
-server_address = ('localhost', 4000)
-print >>sys.stderr, 'connecting to %s port %s' % server_address
-sock.connect(server_address)
-
-def add(x,y):
-    print('lol')
-
-try:
-    # Send data
-    data = sock.recv(1024)
-    data = pickle.loads(data)
-    print(data['add'](3,4))
-
-
-finally:
-    print >>sys.stderr, 'closing socket'
-    sock.close()
+def main():
+    a = ClientStub()
+    res = a.add(-1,4)
+    print(res)
+if __name__ == '__main__':
+    main()
