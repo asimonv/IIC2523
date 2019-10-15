@@ -1,2 +1,2 @@
 Run server/client:
-``python server/client.py`
+`python server/client.py`
