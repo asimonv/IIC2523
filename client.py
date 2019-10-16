@@ -67,7 +67,7 @@ class ClientStub(object):
 def main():
     a = ClientStub()
     a.showAvailableFunctions()
-    res = a.append([1,2],[3,4])
-    print(res)
+    points = [[3,3],[5,-1],[-2,4]]
+    print(a.kClosest(points, 2))
 if __name__ == '__main__':
     main()

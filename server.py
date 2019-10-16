@@ -2,6 +2,7 @@ import socket
 import sys
 import json
 import math
+from Queue import PriorityQueue
 
 class ServerStub(object):
     """docstring for ServerStub."""
@@ -17,13 +18,49 @@ class ServerStub(object):
     def append(self, x, y):
         return x + y
 
+    def flatten_dict(self, init_dict):
+        res_dict = {}
+        if type(init_dict) is not dict:
+            return res_dict
+
+        for k, v in init_dict.items():
+            if type(v) == dict:
+                res_dict.update(self.flatten_dict(v))
+            else:
+                res_dict[k] = v
+
+        return res_dict
+
+    def kClosest(self, points, K):
+        """
+        :type points: List[List[int]]
+        :type K: int
+        :rtype: List[List[int]]
+        """
+        if len(points) <= K: return points
+
+        heap = PriorityQueue()
+        for i in range(K):
+            distance = math.sqrt((points[i][0]**2 + points[i][1]**2))
+            heap.put((-distance, points[i]))
+
+        # Remove n-K greatest distances
+        for j in range(K, len(points)):
+            distance = math.sqrt((points[j][0]**2 + points[j][1]**2))
+            heap.put((-distance, points[j]))
+            heap.get()
+
+        return [heap.get()[1] for _ in range(K)]
+
     def __init__(self):
         super(ServerStub, self).__init__()
         self.availableMethods = [
-            ('add', 'x,y', 'params: x,y -> x+y'),
-            ('mult', 'x,y', 'params: x,y -> x*y'),
-            ('sqrt', 'x', 'params: x -> sqrt(x)'),
-            ('append', 'x, y', 'params: x,y -> [...x, ...y]')
+            ('add', 'x,y', 'params: num x, num y -> x+y'),
+            ('mult', 'x,y', 'params: num x, num y -> x*y'),
+            ('sqrt', 'x', 'params: num x -> sqrt(x)'),
+            ('append', 'x,y', 'params: list x, list y -> [...x, ...y]'),
+            ('flatten_dict', 'x', 'params: dict x -> flattened dict'),
+            ('kClosest', 'x,k', 'params: list[list[int]] -> closest k points to origin := list[list[int]]')
         ]
 
 
