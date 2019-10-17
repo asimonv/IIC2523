@@ -3,6 +3,7 @@ import sys
 import json
 import math
 from queue import PriorityQueue
+from random import random
 
 class ServerStub(object):
     """docstring for ServerStub."""
@@ -30,6 +31,12 @@ class ServerStub(object):
                 res_dict[k] = v
 
         return res_dict
+
+    def get_bear(self, show):
+        return 'ʕ•ᴥ•ʔ' if show else '¯\_(ツ)_/¯'
+
+    def get_random_num(self):
+        return random()
 
     def kClosest(self, points, K):
         """
@@ -60,7 +67,9 @@ class ServerStub(object):
             ('sqrt', 'x', 'params: num x -> sqrt(x)'),
             ('append', 'x,y', 'params: list x, list y -> [...x, ...y]'),
             ('flatten_dict', 'x', 'params: dict x -> flattened dict'),
-            ('kClosest', 'x,k', 'params: list[list[int]] -> closest k points to origin := list[list[int]]')
+            ('kClosest', 'x,k', 'params: list[list[int]] -> closest k points to origin := list[list[int]]'),
+            ('get_random_num', '', 'params: None -> random number between [0.0, 1.0)'),
+            ('get_bear', 'x', 'params: x -> if x is True it will return a 🐻')
         ]
 
 

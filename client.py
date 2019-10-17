@@ -74,5 +74,6 @@ def main():
     a.showAvailableFunctions()
     points = [[3,3],[5,-1],[-2,4]]
     print(a.kClosest(points, 2))
+    print(a.get_bear(False))
 if __name__ == '__main__':
     main()
