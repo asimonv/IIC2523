@@ -1,2 +1,1 @@
-Run server/client:
-`python server/client.py`
+Repo of IIC2523 - Distributed Systems
