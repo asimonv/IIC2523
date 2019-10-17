@@ -57,10 +57,15 @@ class ClientStub(object):
     def make_method(self, name, params):
         def _method(self, *params):
             message = {'id': name, 'params': params}
-            self.sock.sendall(json.dumps(message).encode('utf8'))
-            data = self.sock.recv(4096)
-            if data:
-                return self.unmarshall_message(data)
+            try:
+                self.sock.sendall(json.dumps(message).encode('utf8'))
+                data = self.sock.recv(4096)
+                if data:
+                    return self.unmarshall_message(data)
+                else:
+                    return 'Server Unavailable 😑'
+            except Exception as e:
+                print(e)
         setattr(self.__class__, name, _method)
         return _method
 

@@ -2,7 +2,7 @@ import socket
 import sys
 import json
 import math
-from Queue import PriorityQueue
+from queue import PriorityQueue
 
 class ServerStub(object):
     """docstring for ServerStub."""
