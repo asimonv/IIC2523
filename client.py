@@ -22,7 +22,7 @@ class ClientStub(object):
     def showAvailableFunctions(self):
         print('==== Available Functions ====')
         for f in self.functionData:
-            print('{}({}): {}'.format(*f))
+            print('{}({}): {}'.format(f[0], f[1], f[2].encode('utf8')))
         print('=============================\n')
 
     def fetchParams(self):
